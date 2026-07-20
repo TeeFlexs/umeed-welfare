@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Umeed Welfare Group – Hope • Healing • Humanity</title>
+<style>
+  :root {
+    --green-deep: #0d4f3c;
+    --green-mid: #1a7a5e;
+    --green-light: #2ecc97;
+    --gold: #d4af37;
+    --gold-light: #f4d03f;
+    --cream: #f8f9fa;
+    --black: #0a1612;
+    --text: #1a2e25;
+    --text-light: #4a6b5a;
+    --white: #ffffff;
+    --glass: rgba(255,255,255,0.12);
+    --glass-border: rgba(255,255,255,0.2);
+    --shadow: 0 20px 60px rgba(13,79,60,0.15);
+    --shadow-gold: 0 10px 40px rgba(212,175,55,0.25);
+  }
+  [data-theme="dark"] {
+    --cream: #0a1612;
+    --white: #0f1f18;
+    --text: #e8f4f0;
+    --text-light: #8fbfaa;
+    --glass: rgba(13,79,60,0.25);
+    --glass-border: rgba(26,122,94,0.3);
+    --shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+    transition: background 0.4s, color 0.4s;
+  }
+
+  /* LOADER */
+  #loader {
+    position:fixed; inset:0; z-index:9999;
+    background: var(--green-deep);
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    transition: opacity 0.6s, visibility 0.6s;
+  }
+  #loader.hidden { opacity:0; visibility:hidden; }
+  .loader-logo { animation: loaderPulse 1.5s ease-in-out infinite; }
+  .loader-text {
+    color: var(--gold); font-size:1.4rem; letter-spacing:0.2em;
+    margin-top:1.5rem; font-style:italic;
+    animation: fadeInUp 1s ease forwards;
+  }
+  .loader-bar {
+    width:200px; height:3px; background:rgba(255,255,255,0.15);
+    border-radius:2px; margin-top:2rem; overflow:hidden;
+  }
+  .loader-bar-fill {
+    height:100%; background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius:2px; animation: loadBar 2s ease forwards;
+  }
+  @keyframes loaderPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
+  @keyframes loadBar { 0%{width:0;} 100%{width:100%;} }
+  @keyframes fadeInUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+
+  /* NAV */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    backdrop-filter: blur(20px);
+    background: rgba(13,79,60,0.92);
+    border-bottom: 1px solid rgba(212,175,55,0.2);
+    padding: 0 2rem;
+    transition: all 0.3s;
+  }
+  .nav-inner {
+    max-width:1400px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    height:70px;
+  }
+  .nav-logo { display:flex; align-items:center; gap:0.75rem; cursor:pointer; }
+  .nav-logo-img { width:44px; height:44px; }
+  .nav-logo-text { color:var(--white); }
+  .nav-logo-text strong { display:block; font-size:1.05rem; letter-spacing:0.05em; color:var(--gold); }
+  .nav-logo-text span { font-size:0.65rem; letter-spacing:0.15em; opacity:0.7; }
+  .nav-links { display:flex; align-items:center; gap:0.25rem; }
+  .nav-link {
+    color:rgba(255,255,255,0.8); padding:0.5rem 0.85rem;
+    font-size:0.88rem; letter-spacing:0.05em; border-radius:6px;
+    cursor:pointer; transition:all 0.2s; border:none; background:none;
+    font-family:inherit;
+  }
+  .nav-link:hover, .nav-link.active { color:var(--gold); background:rgba(212,175,55,0.1); }
+  .nav-donate-btn {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color:var(--black); padding:0.5rem 1.25rem; border-radius:25px;
+    font-weight:700; font-size:0.85rem; cursor:pointer; border:none;
+    font-family:inherit; letter-spacing:0.05em;
+    transition:all 0.3s; box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+  }
+  .nav-donate-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(212,175,55,0.5); }
+  .theme-toggle {
+    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+    color:white; width:36px; height:36px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:all 0.2s; font-size:1rem;
+  }
+  .theme-toggle:hover { background:rgba(212,175,55,0.2); }
+  .hamburger {
+    display:none; flex-direction:column; gap:5px; cursor:pointer;
+    padding:5px; background:none; border:none;
+  }
+  .hamburger span { display:block; width:25px; height:2px; background:white; border-radius:2px; transition:all 0.3s; }
+  .mobile-menu {
+    display:none; position:fixed; top:70px; left:0; right:0;
+    background:rgba(13,79,60,0.97); backdrop-filter:blur(20px);
+    padding:1rem; z-index:999; flex-direction:column; gap:0.5rem;
+    border-bottom:1px solid rgba(212,175,55,0.2);
+  }
+  .mobile-menu.open { display:flex; }
+  .mobile-menu .nav-link { padding:0.75rem 1rem; font-size:1rem; }
+
+  /* PAGES */
+  .page { display:none; min-height:100vh; padding-top:70px; }
+  .page.active { display:block; }
+
+  /* HERO */
+  .hero {
+    min-height:calc(100vh - 70px);
+    background: linear-gradient(135deg, var(--green-deep) 0%, #0f6347 40%, #1a7a5e 70%, #0d4f3c 100%);
+    position:relative; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .hero-canvas { position:absolute; inset:0; width:100%; height:100%; }
+  .hero-particles { position:absolute; inset:0; pointer-events:none; }
+  .particle {
+    position:absolute; border-radius:50%;
+    background:rgba(212,175,55,0.15);
+    animation: particleFloat linear infinite;
+  }
+  @keyframes particleFloat {
+    0%{transform:translateY(100vh) rotate(0deg); opacity:0;}
+    10%{opacity:1;}
+    90%{opacity:1;}
+    100%{transform:translateY(-100px) rotate(720deg); opacity:0;}
+  }
+  .hero-content {
+    position:relative; z-index:5; text-align:center;
+    max-width:900px; padding:2rem;
+    animation: heroReveal 1.2s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  @keyframes heroReveal { from{opacity:0;transform:translateY(40px);} to{opacity:1;transform:translateY(0);} }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.4);
+    color:var(--gold); padding:0.4rem 1.2rem; border-radius:25px;
+    font-size:0.78rem; letter-spacing:0.2em; text-transform:uppercase;
+    margin-bottom:1.5rem;
+    animation: heroReveal 1s ease 0.2s both;
+  }
+  .hero-title {
+    font-size:clamp(2.5rem, 6vw, 5rem);
+    color:white; line-height:1.1; font-weight:700;
+    margin-bottom:1rem;
+    animation: heroReveal 1s ease 0.3s both;
+  }
+  .hero-title .gold { color:var(--gold); }
+  .hero-tagline {
+    font-size:clamp(1rem, 2.5vw, 1.4rem); color:rgba(255,255,255,0.75);
+    letter-spacing:0.3em; font-style:italic; margin-bottom:2rem;
+    animation: heroReveal 1s ease 0.4s both;
+  }
+  .hero-quote {
+    background:rgba(255,255,255,0.07); border-left:3px solid var(--gold);
+    padding:1rem 1.5rem; border-radius:0 8px 8px 0; text-align:left;
+    color:rgba(255,255,255,0.8); font-style:italic; font-size:0.95rem;
+    margin-bottom:2.5rem; max-width:700px; margin-left:auto; margin-right:auto;
+    animation: heroReveal 1s ease 0.5s both;
+  }
+  .hero-quote cite { display:block; color:var(--gold); font-size:0.8rem; margin-top:0.5rem; font-style:normal; }
+  .hero-btns { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; animation: heroReveal 1s ease 0.6s both; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color:var(--black); padding:0.9rem 2.5rem; border-radius:50px;
+    font-weight:700; font-size:0.95rem; cursor:pointer; border:none;
+    font-family:inherit; letter-spacing:0.05em;
+    transition:all 0.3s; box-shadow:0 8px 30px rgba(212,175,55,0.4);
+  }
+  .btn-primary:hover { transform:translateY(-3px); box-shadow:0 15px 40px rgba(212,175,55,0.5); }
+  .btn-outline {
+    background:transparent; border:2px solid rgba(255,255,255,0.4);
+    color:white; padding:0.9rem 2.5rem; border-radius:50px;
+    font-weight:600; font-size:0.95rem; cursor:pointer; font-family:inherit;
+    transition:all 0.3s;
+  }
+  .btn-outline:hover { border-color:var(--gold); color:var(--gold); background:rgba(212,175,55,0.1); }
+  .hero-stats {
+    position:absolute; bottom:2rem; left:0; right:0;
+    display:flex; justify-content:center; gap:2rem; flex-wrap:wrap;
+    padding:0 2rem; z-index:5;
+  }
+  .hero-stat {
+    background:rgba(255,255,255,0.08); backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.15); border-radius:12px;
+    padding:1rem 1.5rem; text-align:center;
+    animation: heroReveal 1s ease 0.8s both;
+  }
+  .hero-stat-num { font-size:1.8rem; font-weight:700; color:var(--gold); }
+  .hero-stat-label { font-size:0.75rem; color:rgba(255,255,255,0.7); letter-spacing:0.1em; }
+
+  /* SECTIONS */
+  .section { padding:5rem 2rem; max-width:1400px; margin:0 auto; }
+  .section-sm { padding:3rem 2rem; max-width:1400px; margin:0 auto; }
+  .section-title {
+    font-size:clamp(1.8rem, 4vw, 2.8rem); font-weight:700;
+    color:var(--text); margin-bottom:0.75rem;
+  }
+  .section-title .green { color:var(--green-mid); }
+  .section-title .gold { color:var(--gold); }
+  .section-subtitle {
+    font-size:1rem; color:var(--text-light); max-width:600px; line-height:1.7;
+  }
+  .section-header { margin-bottom:3rem; }
+  .section-header.center { text-align:center; }
+  .section-header.center .section-subtitle { margin:0 auto; }
+  .divider {
+    width:60px; height:3px;
+    background:linear-gradient(90deg, var(--green-mid), var(--gold));
+    border-radius:2px; margin:1rem 0;
+  }
+  .divider.center { margin:1rem auto; }
+
+  /* CARDS */
+  .card {
+    background:var(--white); border-radius:16px;
+    padding:2rem; box-shadow:var(--shadow);
+    transition:all 0.35s cubic-bezier(0.16,1,0.3,1);
+    border:1px solid rgba(13,79,60,0.08);
+  }
+  .card:hover { transform:translateY(-8px); box-shadow:0 30px 80px rgba(13,79,60,0.2); }
+  .grid-3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; }
+  .grid-2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(400px,1fr)); gap:2rem; }
+  .grid-4 { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.5rem; }
+
+  /* IMPACT COUNTERS */
+  .counters-section {
+    background: linear-gradient(135deg, var(--green-deep), #0f6347);
+    padding:4rem 2rem;
+  }
+  .counters-inner { max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:2rem; }
+  .counter-item { text-align:center; }
+  .counter-num {
+    font-size:3rem; font-weight:700; color:var(--gold);
+    display:block; font-variant-numeric:tabular-nums;
+  }
+  .counter-label { color:rgba(255,255,255,0.8); font-size:0.9rem; letter-spacing:0.1em; margin-top:0.25rem; }
+  .counter-icon { font-size:2rem; margin-bottom:0.5rem; display:block; }
+
+  /* IMAGE CARDS */
+  .img-card {
+    border-radius:16px; overflow:hidden; position:relative;
+    aspect-ratio:16/9; background:var(--green-deep);
+    box-shadow:var(--shadow);
+  }
+  .img-card img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+  .img-card:hover img { transform:scale(1.05); }
+  .img-card-overlay {
+    position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+    display:flex; align-items:flex-end; padding:1.5rem;
+  }
+  .img-card-content { color:white; }
+  .img-card-tag {
+    background:var(--gold); color:var(--black); padding:0.2rem 0.7rem;
+    border-radius:20px; font-size:0.7rem; font-weight:700; letter-spacing:0.1em;
+    display:inline-block; margin-bottom:0.5rem;
+  }
+
+  /* PROGRAMS */
+  .program-card {
+    background:var(--white); border-radius:20px; overflow:hidden;
+    box-shadow:var(--shadow); transition:all 0.35s;
+    border:1px solid rgba(13,79,60,0.08);
+  }
+  .program-card:hover { transform:translateY(-10px); box-shadow:0 35px 80px rgba(13,79,60,0.2); }
+  .program-img { height:220px; background:var(--green-deep); overflow:hidden; position:relative; }
+  .program-img img { width:100%; height:100%; object-fit:cover; }
+  .program-img-overlay {
+    position:absolute; inset:0;
+    background:linear-gradient(135deg, rgba(13,79,60,0.6), rgba(212,175,55,0.2));
+  }
+  .program-body { padding:1.75rem; }
+  .program-icon {
+    width:52px; height:52px; border-radius:12px;
+    background:linear-gradient(135deg, var(--green-mid), var(--green-deep));
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:1rem; box-shadow:0 8px 20px rgba(26,122,94,0.3);
+  }
+  .program-icon svg { color:white; }
+  .program-title { font-size:1.2rem; font-weight:700; color:var(--text); margin-bottom:0.5rem; }
+  .program-desc { color:var(--text-light); font-size:0.9rem; line-height:1.7; }
+  .program-stats { display:flex; gap:1rem; margin-top:1rem; }
+  .program-stat { text-align:center; }
+  .program-stat-num { font-size:1.2rem; font-weight:700; color:var(--green-mid); display:block; }
+  .program-stat-label { font-size:0.7rem; color:var(--text-light); }
+
+  /* DONATE PAGE */
+  .donate-hero {
+    background:linear-gradient(135deg, var(--green-deep), #0f6347);
+    padding:4rem 2rem; text-align:center; color:white;
+  }
+  .bank-card {
+    background:linear-gradient(135deg, var(--green-deep), #1a5c42);
+    border-radius:20px; padding:2rem; color:white;
+    border:1px solid rgba(212,175,55,0.3);
+    box-shadow:var(--shadow-gold);
+    position:relative; overflow:hidden;
+  }
+  .bank-card::before {
+    content:''; position:absolute; top:-50%; right:-20%;
+    width:300px; height:300px; border-radius:50%;
+    background:rgba(212,175,55,0.05); pointer-events:none;
+  }
+  .bank-card-header { display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem; }
+  .bank-logo-area {
+    background:linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius:12px; padding:0.75rem 1.25rem;
+    font-weight:800; font-size:1.1rem; color:var(--black); letter-spacing:0.1em;
+  }
+  .bank-info { flex:1; }
+  .bank-name { font-size:1.1rem; font-weight:700; color:var(--gold); }
+  .bank-subtitle { font-size:0.78rem; opacity:0.7; }
+  .bank-detail-row {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:0.75rem 0; border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  .bank-detail-row:last-child { border-bottom:none; }
+  .bank-detail-label { font-size:0.8rem; opacity:0.7; }
+  .bank-detail-value { font-weight:700; font-size:0.95rem; font-family:monospace; color:var(--gold-light); }
+  .copy-btn {
+    background:rgba(212,175,55,0.2); border:1px solid rgba(212,175,55,0.4);
+    color:var(--gold); padding:0.2rem 0.6rem; border-radius:6px;
+    font-size:0.7rem; cursor:pointer; transition:all 0.2s; border:none;
+  }
+  .copy-btn:hover { background:rgba(212,175,55,0.35); }
+  .donation-amount-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.75rem; margin:1.5rem 0; }
+  .amount-btn {
+    border:2px solid rgba(13,79,60,0.2); background:var(--white);
+    border-radius:10px; padding:0.75rem; text-align:center; cursor:pointer;
+    transition:all 0.25s; font-family:inherit;
+  }
+  .amount-btn:hover, .amount-btn.selected {
+    border-color:var(--green-mid); background:rgba(26,122,94,0.08);
+    color:var(--green-mid); font-weight:700;
+  }
+  .amount-btn .amount-num { display:block; font-size:1.1rem; font-weight:700; color:var(--green-deep); }
+  .amount-btn .amount-impact { font-size:0.7rem; color:var(--text-light); }
+  .impact-calc {
+    background:linear-gradient(135deg, rgba(13,79,60,0.05), rgba(212,175,55,0.05));
+    border:1px solid rgba(13,79,60,0.1); border-radius:16px; padding:1.5rem;
+    margin-top:1.5rem;
+  }
+  .progress-bar { background:rgba(13,79,60,0.1); border-radius:10px; height:10px; overflow:hidden; margin:0.5rem 0; }
+  .progress-fill {
+    height:100%; border-radius:10px;
+    background:linear-gradient(90deg, var(--green-mid), var(--gold));
+    transition:width 1s ease;
+  }
+
+  /* BLOG */
+  .blog-card {
+    background:var(--white); border-radius:16px; overflow:hidden;
+    box-shadow:var(--shadow); transition:all 0.35s;
+    border:1px solid rgba(13,79,60,0.08); cursor:pointer;
+  }
+  .blog-card:hover { transform:translateY(-8px); box-shadow:0 30px 70px rgba(13,79,60,0.2); }
+  .blog-img { height:200px; overflow:hidden; background:var(--green-deep); }
+  .blog-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+  .blog-card:hover .blog-img img { transform:scale(1.08); }
+  .blog-body { padding:1.5rem; }
+  .blog-category {
+    display:inline-block; background:rgba(26,122,94,0.1);
+    color:var(--green-mid); padding:0.2rem 0.7rem; border-radius:20px;
+    font-size:0.72rem; font-weight:700; letter-spacing:0.1em; margin-bottom:0.75rem;
+  }
+  .blog-title { font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:0.5rem; line-height:1.4; }
+  .blog-excerpt { font-size:0.88rem; color:var(--text-light); line-height:1.7; }
+  .blog-meta { display:flex; align-items:center; justify-content:space-between; margin-top:1rem; }
+  .blog-author { display:flex; align-items:center; gap:0.5rem; }
+  .blog-avatar {
+    width:30px; height:30px; border-radius:50%; background:var(--green-mid);
+    display:flex; align-items:center; justify-content:center; color:white; font-size:0.8rem; font-weight:700;
+  }
+  .blog-date { font-size:0.75rem; color:var(--text-light); }
+
+  /* GALLERY */
+  .gallery-grid {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:1rem;
+  }
+  .gallery-item {
+    aspect-ratio:4/3; border-radius:12px; overflow:hidden;
+    cursor:pointer; position:relative; background:var(--green-deep);
+  }
+  .gallery-item img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+  .gallery-item:hover img { transform:scale(1.08); }
+  .gallery-overlay {
+    position:absolute; inset:0; background:rgba(13,79,60,0.7);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; transition:opacity 0.3s; color:white; flex-direction:column; gap:0.5rem;
+  }
+  .gallery-item:hover .gallery-overlay { opacity:1; }
+  .filter-btns { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:2rem; }
+  .filter-btn {
+    padding:0.5rem 1.25rem; border-radius:25px; border:2px solid rgba(13,79,60,0.2);
+    background:transparent; font-family:inherit; font-size:0.85rem; cursor:pointer;
+    transition:all 0.25s; color:var(--text);
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background:var(--green-mid); border-color:var(--green-mid); color:white;
+  }
+
+  /* TESTIMONIALS */
+  .testimonial-carousel { position:relative; overflow:hidden; }
+  .testimonial-track { display:flex; transition:transform 0.5s ease; }
+  .testimonial-slide { min-width:100%; padding:0 1rem; }
+  .testimonial-card {
+    background:var(--white); border-radius:20px; padding:2rem;
+    box-shadow:var(--shadow); border-left:4px solid var(--gold);
+    max-width:700px; margin:0 auto;
+  }
+  .testimonial-quote { font-size:1.05rem; color:var(--text); line-height:1.8; font-style:italic; margin-bottom:1.5rem; }
+  .testimonial-author { display:flex; align-items:center; gap:1rem; }
+  .testimonial-avatar {
+    width:50px; height:50px; border-radius:50%;
+    background:linear-gradient(135deg, var(--green-mid), var(--green-deep));
+    display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:1.1rem;
+  }
+  .testimonial-name { font-weight:700; color:var(--text); }
+  .testimonial-role { font-size:0.8rem; color:var(--text-light); }
+  .carousel-controls { display:flex; justify-content:center; gap:1rem; margin-top:1.5rem; }
+  .carousel-btn {
+    width:40px; height:40px; border-radius:50%;
+    background:var(--green-mid); color:white; border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:all 0.2s;
+  }
+  .carousel-btn:hover { background:var(--green-deep); transform:scale(1.1); }
+  .carousel-dots { display:flex; gap:0.5rem; align-items:center; }
+  .carousel-dot {
+    width:8px; height:8px; border-radius:50%;
+    background:rgba(13,79,60,0.2); border:none; cursor:pointer; transition:all 0.25s;
+  }
+  .carousel-dot.active { background:var(--green-mid); width:24px; border-radius:4px; }
+
+  /* CONTACT */
+  .contact-form-group { margin-bottom:1.25rem; }
+  .contact-label { display:block; font-size:0.85rem; font-weight:600; color:var(--text); margin-bottom:0.4rem; }
+  .contact-input, .contact-textarea, .contact-select {
+    width:100%; padding:0.85rem 1rem; border-radius:10px;
+    border:2px solid rgba(13,79,60,0.15); background:var(--white); color:var(--text);
+    font-family:inherit; font-size:0.9rem; transition:all 0.25s; outline:none;
+  }
+  .contact-input:focus, .contact-textarea:focus, .contact-select:focus {
+    border-color:var(--green-mid); box-shadow:0 0 0 3px rgba(26,122,94,0.1);
+  }
+  .contact-textarea { height:140px; resize:vertical; }
+  .submit-btn {
+    width:100%; padding:1rem; background:linear-gradient(135deg, var(--green-mid), var(--green-deep));
+    color:white; border:none; border-radius:10px; font-family:inherit;
+    font-size:1rem; font-weight:700; cursor:pointer; transition:all 0.3s;
+    letter-spacing:0.05em;
+  }
+  .submit-btn:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(13,79,60,0.3); }
+  .faq-item {
+    border:1px solid rgba(13,79,60,0.1); border-radius:10px; overflow:hidden; margin-bottom:0.75rem;
+    background:var(--white);
+  }
+  .faq-question {
+    padding:1rem 1.25rem; cursor:pointer; display:flex; justify-content:space-between;
+    align-items:center; font-weight:600; color:var(--text); font-size:0.95rem;
+  }
+  .faq-answer {
+    padding:0 1.25rem; max-height:0; overflow:hidden; transition:all 0.3s;
+    color:var(--text-light); font-size:0.9rem; line-height:1.7;
+  }
+  .faq-item.open .faq-answer { max-height:200px; padding:0 1.25rem 1rem; }
+
+  /* ABOUT */
+  .timeline { position:relative; padding-left:2rem; }
+  .timeline::before {
+    content:''; position:absolute; left:0; top:0; bottom:0;
+    width:2px; background:linear-gradient(180deg, var(--green-mid), var(--gold));
+  }
+  .timeline-item { position:relative; margin-bottom:2.5rem; }
+  .timeline-dot {
+    position:absolute; left:-2.45rem; top:0.2rem;
+    width:14px; height:14px; border-radius:50%;
+    background:linear-gradient(135deg, var(--green-mid), var(--gold));
+    border:3px solid var(--white); box-shadow:0 0 0 2px var(--green-mid);
+  }
+  .timeline-year { color:var(--gold); font-weight:700; font-size:0.85rem; margin-bottom:0.25rem; }
+  .timeline-title { font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:0.4rem; }
+  .timeline-desc { color:var(--text-light); font-size:0.9rem; line-height:1.6; }
+  .team-card {
+    background:var(--white); border-radius:16px; overflow:hidden;
+    box-shadow:var(--shadow); text-align:center; transition:all 0.35s;
+    border:1px solid rgba(13,79,60,0.08);
+  }
+  .team-card:hover { transform:translateY(-8px); }
+  .team-img { height:200px; background:linear-gradient(135deg, var(--green-deep), var(--green-mid)); display:flex; align-items:center; justify-content:center; }
+  .team-img svg { opacity:0.5; }
+  .team-body { padding:1.25rem; }
+  .team-name { font-weight:700; color:var(--text); font-size:1rem; }
+  .team-role { color:var(--green-mid); font-size:0.82rem; font-weight:600; margin-top:0.2rem; }
+  .team-desc { color:var(--text-light); font-size:0.82rem; margin-top:0.5rem; line-height:1.5; }
+
+  /* PARTNERS */
+  .partners-strip {
+    background:var(--white); border-top:1px solid rgba(13,79,60,0.08);
+    border-bottom:1px solid rgba(13,79,60,0.08); padding:2rem;
+  }
+  .partners-inner { max-width:1400px; margin:0 auto; text-align:center; }
+  .partners-logos { display:flex; gap:3rem; align-items:center; justify-content:center; flex-wrap:wrap; margin-top:1.5rem; }
+  .partner-logo {
+    display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+    opacity:0.7; transition:opacity 0.25s;
+  }
+  .partner-logo:hover { opacity:1; }
+  .partner-logo-box {
+    width:80px; height:80px; border-radius:16px;
+    border:2px solid rgba(13,79,60,0.15);
+    display:flex; align-items:center; justify-content:center;
+    background:var(--cream);
+  }
+  .partner-name { font-weight:700; color:var(--text); font-size:0.85rem; }
+  .partner-subtitle { font-size:0.72rem; color:var(--text-light); }
+
+  /* FOOTER */
+  footer {
+    background: var(--green-deep);
+    color:rgba(255,255,255,0.8); padding:4rem 2rem 1rem;
+  }
+  .footer-inner { max-width:1400px; margin:0 auto; }
+  .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:3rem; margin-bottom:3rem; }
+  .footer-brand { }
+  .footer-logo { display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem; }
+  .footer-desc { font-size:0.88rem; line-height:1.8; opacity:0.75; max-width:280px; }
+  .footer-social { display:flex; gap:0.75rem; margin-top:1.25rem; }
+  .social-btn {
+    width:36px; height:36px; border-radius:8px;
+    background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:all 0.25s; border:none; color:white;
+  }
+  .social-btn:hover { background:rgba(212,175,55,0.3); color:var(--gold); }
+  .footer-col h4 { color:var(--gold); font-size:0.85rem; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:1rem; }
+  .footer-links { list-style:none; }
+  .footer-links li { margin-bottom:0.5rem; }
+  .footer-links a {
+    color:rgba(255,255,255,0.65); font-size:0.88rem; cursor:pointer;
+    transition:color 0.2s; text-decoration:none;
+  }
+  .footer-links a:hover { color:var(--gold); }
+  .footer-bottom {
+    border-top:1px solid rgba(255,255,255,0.1); padding-top:1.5rem;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;
+    font-size:0.8rem; opacity:0.6;
+  }
+  .newsletter-form { display:flex; gap:0.5rem; margin-top:0.75rem; }
+  .newsletter-input {
+    flex:1; padding:0.6rem 1rem; border-radius:8px;
+    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+    color:white; font-family:inherit; font-size:0.85rem; outline:none;
+  }
+  .newsletter-input::placeholder { color:rgba(255,255,255,0.4); }
+  .newsletter-btn {
+    padding:0.6rem 1rem; background:var(--gold); color:var(--black);
+    border:none; border-radius:8px; font-family:inherit; font-weight:700;
+    font-size:0.8rem; cursor:pointer; transition:all 0.2s;
+  }
+  .newsletter-btn:hover { background:var(--gold-light); }
+
+  /* FLOATING BUTTONS */
+  .fab-container { position:fixed; bottom:2rem; right:2rem; display:flex; flex-direction:column; gap:0.75rem; z-index:900; }
+  .fab {
+    width:52px; height:52px; border-radius:50%; border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 25px rgba(0,0,0,0.2); transition:all 0.3s;
+    font-size:1.3rem;
+  }
+  .fab:hover { transform:translateY(-4px) scale(1.05); }
+  .fab-whatsapp { background:#25D366; color:white; }
+  .fab-top { background:var(--green-mid); color:white; }
+
+  /* BLOG DETAIL */
+  .blog-detail {
+    max-width:800px; margin:0 auto; padding:2rem;
+  }
+  .blog-detail-img { border-radius:16px; overflow:hidden; margin-bottom:2rem; height:400px; }
+  .blog-detail-img img { width:100%; height:100%; object-fit:cover; }
+  .blog-detail-title { font-size:2rem; font-weight:700; color:var(--text); line-height:1.3; margin-bottom:1rem; }
+  .blog-detail-meta { display:flex; gap:1.5rem; color:var(--text-light); font-size:0.85rem; margin-bottom:2rem; flex-wrap:wrap; }
+  .blog-detail-content { font-size:1.0rem; line-height:1.9; color:var(--text); }
+  .blog-detail-content p { margin-bottom:1.25rem; }
+  .blog-detail-content h3 { font-size:1.25rem; color:var(--green-mid); margin:1.75rem 0 0.75rem; }
+  .blog-detail-content blockquote {
+    border-left:4px solid var(--gold); padding:1rem 1.5rem; background:rgba(212,175,55,0.05);
+    border-radius:0 8px 8px 0; margin:1.5rem 0; font-style:italic; color:var(--text-light);
+  }
+
+  /* SEARCH */
+  .search-bar {
+    display:flex; gap:0.75rem; max-width:500px; margin-bottom:2rem;
+  }
+  .search-input {
+    flex:1; padding:0.75rem 1.25rem; border-radius:50px;
+    border:2px solid rgba(13,79,60,0.15); background:var(--white);
+    font-family:inherit; font-size:0.9rem; outline:none; color:var(--text);
+    transition:border-color 0.25s;
+  }
+  .search-input:focus { border-color:var(--green-mid); }
+  .search-btn {
+    padding:0.75rem 1.5rem; background:var(--green-mid); color:white;
+    border:none; border-radius:50px; font-family:inherit; cursor:pointer;
+    font-size:0.85rem; font-weight:600; transition:all 0.25s;
+  }
+  .search-btn:hover { background:var(--green-deep); }
+
+  /* MISC */
+  .tag {
+    display:inline-block; padding:0.25rem 0.75rem; border-radius:20px;
+    font-size:0.75rem; font-weight:700; letter-spacing:0.08em;
+  }
+  .tag-green { background:rgba(26,122,94,0.1); color:var(--green-mid); }
+  .tag-gold { background:rgba(212,175,55,0.1); color:#8a6e00; }
+  .mission-card {
+    background:linear-gradient(135deg, var(--green-deep), #1a5c42);
+    border-radius:20px; padding:2rem; color:white; text-align:center;
+    transition:transform 0.3s;
+  }
+  .mission-card:hover { transform:translateY(-5px); }
+  .mission-icon { font-size:2.5rem; margin-bottom:1rem; }
+  .mission-title { font-size:1.1rem; font-weight:700; color:var(--gold); margin-bottom:0.5rem; }
+  .mission-desc { font-size:0.88rem; opacity:0.8; line-height:1.6; }
+  .donate-ticker {
+    background:var(--green-deep); padding:0.6rem 0; overflow:hidden;
+    border-bottom:1px solid rgba(212,175,55,0.2);
+  }
+  .ticker-inner {
+    display:flex; gap:4rem; width:max-content;
+    animation:tickerScroll 25s linear infinite;
+  }
+  .ticker-item { color:rgba(255,255,255,0.8); font-size:0.82rem; white-space:nowrap; }
+  .ticker-item .highlight { color:var(--gold); font-weight:700; }
+  @keyframes tickerScroll { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+  .section-divider {
+    height:4px; background:linear-gradient(90deg, transparent, var(--green-mid), var(--gold), var(--green-mid), transparent);
+    border:none; margin:0;
+  }
+
+  /* ANIMATIONS */
+  .reveal {
+    opacity:0; transform:translateY(30px); transition:all 0.7s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+  .reveal-left { opacity:0; transform:translateX(-30px); transition:all 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .reveal-left.visible { opacity:1; transform:translateX(0); }
+  .reveal-right { opacity:0; transform:translateX(30px); transition:all 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .reveal-right.visible { opacity:1; transform:translateX(0); }
+
+  /* RESPONSIVE */
+  @media(max-width:768px) {
+    .nav-links { display:none; }
+    .hamburger { display:flex; }
+    .footer-grid { grid-template-columns:1fr 1fr; }
+    .grid-2 { grid-template-columns:1fr; }
+    .hero-stats { gap:0.75rem; }
+    .hero-stat { padding:0.75rem 1rem; }
+    .hero-stat-num { font-size:1.3rem; }
+    .donation-amount-grid { grid-template-columns:repeat(2,1fr); }
+    .footer-grid { grid-template-columns:1fr; }
+    .search-bar { flex-direction:column; max-width:100%; }
+    .blog-detail-img { height:250px; }
+  }
+  @media(max-width:480px) {
+    .section { padding:3rem 1rem; }
+    .hero-content { padding:1rem; }
+    .hero-btns { flex-direction:column; align-items:center; }
+    .btn-primary, .btn-outline { width:100%; text-align:center; }
+    .counters-inner { grid-template-columns:repeat(2,1fr); }
+    .filter-btns { gap:0.4rem; }
+    .filter-btn { padding:0.4rem 0.9rem; font-size:0.8rem; }
+  }
+
+  /* GLASSMORPHISM FEATURE CARD */
+  .glass-card {
+    background:rgba(255,255,255,0.08); backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,0.18); border-radius:16px; padding:1.5rem;
+  }
+  .hero-floating-card {
+    position:absolute; background:rgba(255,255,255,0.1); backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,0.2); border-radius:14px; padding:1rem 1.25rem;
+    color:white; font-size:0.82rem; box-shadow:0 20px 50px rgba(0,0,0,0.2);
+    animation:floatCard 4s ease-in-out infinite;
+  }
+  @keyframes floatCard {
+    0%,100%{transform:translateY(0) rotate(-2deg);}
+    50%{transform:translateY(-12px) rotate(1deg);}
+  }
+  .hero-floating-card.card1 { left:5%; top:25%; animation-delay:0s; }
+  .hero-floating-card.card2 { right:5%; top:35%; animation-delay:1.5s; }
+  .hero-floating-card .fc-num { font-size:1.4rem; font-weight:700; color:var(--gold); }
+  @media(max-width:900px) { .hero-floating-card { display:none; } }
+
+  /* BACK BUTTON */
+  .back-btn {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    color:var(--green-mid); font-weight:600; cursor:pointer;
+    background:none; border:none; font-family:inherit; font-size:0.9rem;
+    padding:0.5rem 0; margin-bottom:1.5rem; transition:color 0.2s;
+  }
+  .back-btn:hover { color:var(--green-deep); }
+
+  /* MAP PLACEHOLDER */
+  .map-placeholder {
+    background:linear-gradient(135deg, #e8f4f0, #d4ebe4);
+    border-radius:16px; height:300px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:var(--green-mid); border:2px dashed rgba(26,122,94,0.3);
+  }
+  .map-placeholder svg { margin-bottom:1rem; opacity:0.5; }
+  .notification {
+    position:fixed; top:90px; right:1.5rem; z-index:9999;
+    background:var(--green-deep); color:white; padding:0.75rem 1.25rem;
+    border-radius:10px; font-size:0.85rem; box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    transform:translateX(150%); transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    border-left:3px solid var(--gold);
+  }
+  .notification.show { transform:translateX(0); }
+</style>
+</head>
+<body>
+
+<!-- NOTIFICATION -->
+<div id="notification" class="notification">Copied to clipboard!</div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+      <circle cx="40" cy="40" r="38" stroke="rgba(212,175,55,0.3)" stroke-width="2"/>
+      <!-- U shape -->
+      <path d="M20 20 L20 45 Q20 60 40 60 Q60 60 60 45 L60 20" stroke="#d4af37" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <!-- Hands -->
+      <path d="M28 52 Q40 68 52 52" stroke="#2ecc97" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- People dots -->
+      <circle cx="33" cy="45" r="4" fill="#d4af37"/>
+      <circle cx="40" cy="42" r="4" fill="#2ecc97"/>
+      <circle cx="47" cy="45" r="4" fill="#d4af37"/>
+    </svg>
+  </div>
+  <div class="loader-text">Hope &bull; Healing &bull; Humanity</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- DONATION TICKER -->
+<div class="donate-ticker" id="ticker">
+  <div class="ticker-inner" id="tickerInner">
+    <span class="ticker-item">Ahmad K. donated <span class="highlight">PKR 5,000</span> – 2 mins ago</span>
+    <span class="ticker-item">Fatima R. donated <span class="highlight">PKR 10,000</span> – 5 mins ago</span>
+    <span class="ticker-item">Muhammad S. donated <span class="highlight">PKR 2,500</span> – 8 mins ago</span>
+    <span class="ticker-item">Zainab A. donated <span class="highlight">PKR 15,000</span> – 12 mins ago</span>
+    <span class="ticker-item">Hassan B. donated <span class="highlight">PKR 3,000</span> – 15 mins ago</span>
+    <span class="ticker-item">Ayesha M. donated <span class="highlight">PKR 7,500</span> – 20 mins ago</span>
+    <span class="ticker-item">Ibrahim K. donated <span class="highlight">PKR 20,000</span> – 25 mins ago</span>
+    <span class="ticker-item">Ahmad K. donated <span class="highlight">PKR 5,000</span> – 2 mins ago</span>
+    <span class="ticker-item">Fatima R. donated <span class="highlight">PKR 10,000</span> – 5 mins ago</span>
+    <span class="ticker-item">Muhammad S. donated <span class="highlight">PKR 2,500</span> – 8 mins ago</span>
+    <span class="ticker-item">Zainab A. donated <span class="highlight">PKR 15,000</span> – 12 mins ago</span>
+    <span class="ticker-item">Hassan B. donated <span class="highlight">PKR 3,000</span> – 15 mins ago</span>
+    <span class="ticker-item">Ayesha M. donated <span class="highlight">PKR 7,500</span> – 20 mins ago</span>
+    <span class="ticker-item">Ibrahim K. donated <span class="highlight">PKR 20,000</span> – 25 mins ago</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="navigate('home')">
+      <svg class="nav-logo-img" viewBox="0 0 44 44" fill="none">
+        <circle cx="22" cy="22" r="21" fill="rgba(212,175,55,0.15)" stroke="rgba(212,175,55,0.4)" stroke-width="1.5"/>
+        <path d="M11 11 L11 24 Q11 34 22 34 Q33 34 33 24 L33 11" stroke="#d4af37" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M15 29 Q22 38 29 29" stroke="#2ecc97" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="18" cy="26" r="2.5" fill="#d4af37"/>
+        <circle cx="22" cy="24" r="2.5" fill="#2ecc97"/>
+        <circle cx="26" cy="26" r="2.5" fill="#d4af37"/>
+      </svg>
+      <div class="nav-logo-text">
+        <strong>Umeed Welfare Group</strong>
+        <span>Hope &bull; Healing &bull; Humanity</span>
+      </div>
+    </div>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="navigate('home')">Home</button>
+      <button class="nav-link" onclick="navigate('about')">About</button>
+      <button class="nav-link" onclick="navigate('programs')">Programs</button>
+      <button class="nav-link" onclick="navigate('donate')">Donate</button>
+      <button class="nav-link" onclick="navigate('blog')">Blog</button>
+      <button class="nav-link" onclick="navigate('gallery')">Gallery</button>
+      <button class="nav-link" onclick="navigate('contact')">Contact</button>
+      <button class="nav-donate-btn" onclick="navigate('donate')">Donate Now</button>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+        <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
+    </div>
+    <button class="hamburger" onclick="toggleMobile()" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="nav-link" onclick="navigate('home');closeMobile()">Home</button>
+  <button class="nav-link" onclick="navigate('about');closeMobile()">About</button>
+  <button class="nav-link" onclick="navigate('programs');closeMobile()">Programs</button>
+  <button class="nav-link" onclick="navigate('donate');closeMobile()">Donate</button>
+  <button class="nav-link" onclick="navigate('blog');closeMobile()">Blog</button>
+  <button class="nav-link" onclick="navigate('gallery');closeMobile()">Gallery</button>
+  <button class="nav-link" onclick="navigate('contact');closeMobile()">Contact</button>
+</div>
+
+<!-- ==================== HOME PAGE ==================== -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <canvas class="hero-canvas" id="heroCanvas"></canvas>
+    <div class="hero-particles" id="heroParticles"></div>
+
+    <!-- Floating Cards -->
+    <div class="hero-floating-card card1">
+      <div class="fc-num">2,400+</div>
+      <div>Lives Touched</div>
+    </div>
+    <div class="hero-floating-card card2">
+      <div class="fc-num">18</div>
+      <div>Medical Camps</div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="var(--gold)"><circle cx="6" cy="6" r="5"/></svg>
+        Serving Communities Since 2019
+      </div>
+      <h1 class="hero-title">
+        Bringing <span class="gold">Hope</span> &amp; Healing<br>to Those Who Need It Most
+      </h1>
+      <p class="hero-tagline">Hope &bull; Healing &bull; Humanity</p>
+      <div class="hero-quote">
+        "The best of people are those who bring benefit to others."
+        <cite>— Prophet Muhammad (PBUH)</cite>
+      </div>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="navigate('donate')">Donate Now</button>
+        <button class="btn-outline" onclick="navigate('programs')">Our Programs</button>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-target="2400">0</div>
+        <div class="hero-stat-label">Patients Served</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-target="18">0</div>
+        <div class="hero-stat-label">Medical Camps</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-target="120">0</div>
+        <div class="hero-stat-label">Volunteers</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-target="6">0</div>
+        <div class="hero-stat-label">Districts Reached</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COUNTERS -->
+  <section class="counters-section">
+    <div class="counters-inner">
+      <div class="counter-item reveal">
+        <span class="counter-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </span>
+        <span class="counter-num" data-target="2400">0</span>
+        <span class="counter-label">Patients Served</span>
+      </div>
+      <div class="counter-item reveal" style="transition-delay:0.1s">
+        <span class="counter-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </span>
+        <span class="counter-num" data-target="18">0</span>
+        <span class="counter-label">Medical Camps Held</span>
+      </div>
+      <div class="counter-item reveal" style="transition-delay:0.2s">
+        <span class="counter-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        </span>
+        <span class="counter-num" data-target="5200">0</span>
+        <span class="counter-label">Medicines Distributed</span>
+      </div>
+      <div class="counter-item reveal" style="transition-delay:0.3s">
+        <span class="counter-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </span>
+        <span class="counter-num" data-target="120">0</span>
+        <span class="counter-label">Dedicated Volunteers</span>
+      </div>
+      <div class="counter-item reveal" style="transition-delay:0.4s">
+        <span class="counter-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </span>
+        <span class="counter-num" data-target="95">0</span>
+        <span class="counter-label">% Donor Satisfaction</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION PREVIEW -->
+  <section class="section">
+    <div class="section-header">
+      <div class="tag tag-green">Our Mission</div>
+      <h2 class="section-title" style="margin-top:0.75rem">Give Hope. Build a Healthier<br>Community. <span class="green">Serve Humanity.</span></h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">Umeed Welfare Group runs free medical camps across underprivileged communities, providing essential healthcare to those who cannot afford it.</p>
+    </div>
+    <div class="grid-3">
+      <div class="mission-card reveal">
+        <div class="mission-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div class="mission-title">Give Hope</div>
+        <div class="mission-desc">We restore faith and dignity to communities forgotten by the system, proving that no one should suffer for lack of resources.</div>
+      </div>
+      <div class="mission-card reveal" style="transition-delay:0.15s">
+        <div class="mission-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="mission-title">Build Healthier Communities</div>
+        <div class="mission-desc">Through preventive care, awareness campaigns, and medical outreach, we address root causes of preventable disease.</div>
+      </div>
+      <div class="mission-card reveal" style="transition-delay:0.3s">
+        <div class="mission-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="mission-title">Serve Humanity</div>
+        <div class="mission-desc">Guided by Islamic values and humanitarian principles, every action we take is in service of the most vulnerable among us.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- SERVICES OVERVIEW -->
+  <section class="section">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;">
+      <div class="reveal-left">
+        <div class="tag tag-gold">Our Services</div>
+        <h2 class="section-title" style="margin-top:0.75rem">Free Healthcare<br>for <span class="green">Those Who Need</span><br>It Most</h2>
+        <div class="divider"></div>
+        <p class="section-subtitle" style="margin-bottom:2rem">We provide comprehensive, free-of-cost medical services to underprivileged communities across Pakistan.</p>
+        <div style="display:flex; flex-direction:column; gap:1rem;">
+          <div style="display:flex; gap:1rem; align-items:flex-start;">
+            <div style="width:44px; height:44px; border-radius:10px; background:rgba(26,122,94,0.1); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green-mid)" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <div>
+              <div style="font-weight:700; color:var(--text);">Free Medical Consultations</div>
+              <div style="color:var(--text-light); font-size:0.88rem; margin-top:0.2rem;">Qualified doctors providing free consultations at each camp.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:1rem; align-items:flex-start;">
+            <div style="width:44px; height:44px; border-radius:10px; background:rgba(26,122,94,0.1); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green-mid)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            </div>
+            <div>
+              <div style="font-weight:700; color:var(--text);">Basic Diagnostic Services</div>
+              <div style="color:var(--text-light); font-size:0.88rem; margin-top:0.2rem;">Blood tests, BP checks, blood sugar, and other vital diagnostics.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:1rem; align-items:flex-start;">
+            <div style="width:44px; height:44px; border-radius:10px; background:rgba(26,122,94,0.1); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green-mid)" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+            </div>
+            <div>
+              <div style="font-weight:700; color:var(--text);">Medicines &amp; Healthcare Supplies</div>
+              <div style="color:var(--text-light); font-size:0.88rem; margin-top:0.2rem;">Essential medicines distributed free of charge to all patients.</div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-primary" style="margin-top:2rem;" onclick="navigate('programs')">View All Programs</button>
+      </div>
+      <div class="reveal-right" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="img-card" style="aspect-ratio:3/4;">
+          <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80" alt="Medical camp"/>
+          <div class="img-card-overlay"><div class="img-card-content"><span class="img-card-tag">Medical Camp</span><div>Free consultations</div></div></div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:1rem;">
+          <div class="img-card" style="aspect-ratio:4/3;">
+            <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&q=80" alt="Healthcare"/>
+            <div class="img-card-overlay"><div class="img-card-content"><span class="img-card-tag">Healthcare</span></div></div>
+          </div>
+          <div class="img-card" style="aspect-ratio:4/3;">
+            <img src="https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?w=400&q=80" alt="Volunteers"/>
+            <div class="img-card-overlay"><div class="img-card-content"><span class="img-card-tag">Volunteers</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED STORIES -->
+  <section style="background:rgba(13,79,60,0.04); padding:5rem 2rem;">
+    <div style="max-width:1400px; margin:0 auto;">
+      <div class="section-header center">
+        <div class="tag tag-green">Featured Stories</div>
+        <h2 class="section-title" style="margin-top:0.75rem">Lives We've <span class="green">Transformed</span></h2>
+        <div class="divider center"></div>
+        <p class="section-subtitle">Real stories of hope and healing from the communities we serve.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card reveal">
+          <div style="height:180px; border-radius:10px; overflow:hidden; margin-bottom:1.25rem;">
+            <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=500&q=80" alt="Community" style="width:100%;height:100%;object-fit:cover;"/>
+          </div>
+          <div class="tag tag-green" style="margin-bottom:0.75rem;">Community Story</div>
+          <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:0.5rem;">Fatima's Second Chance at Life</h3>
+          <p style="color:var(--text-light); font-size:0.88rem; line-height:1.7;">A 45-year-old widow from a remote village finally received diagnosis and treatment for her chronic condition, thanks to our camp in Sindh.</p>
+          <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(13,79,60,0.1); color:var(--text-light); font-size:0.78rem;">March 2024 &bull; Sindh District</div>
+        </div>
+        <div class="card reveal" style="transition-delay:0.15s">
+          <div style="height:180px; border-radius:10px; overflow:hidden; margin-bottom:1.25rem;">
+            <img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?w=500&q=80" alt="Children" style="width:100%;height:100%;object-fit:cover;"/>
+          </div>
+          <div class="tag tag-gold" style="margin-bottom:0.75rem;">Children's Health</div>
+          <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:0.5rem;">50 Children Vaccinated in One Day</h3>
+          <p style="color:var(--text-light); font-size:0.88rem; line-height:1.7;">Our mobile medical unit reached a village with no healthcare access, vaccinating 50 children against preventable diseases in a single session.</p>
+          <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(13,79,60,0.1); color:var(--text-light); font-size:0.78rem;">January 2024 &bull; Punjab District</div>
+        </div>
+        <div class="card reveal" style="transition-delay:0.3s">
+          <div style="height:180px; border-radius:10px; overflow:hidden; margin-bottom:1.25rem;">
+            <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=500&q=80" alt="Elderly" style="width:100%;height:100%;object-fit:cover;"/>
+          </div>
+          <div class="tag tag-green" style="margin-bottom:0.75rem;">Elder Care</div>
+          <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:0.5rem;">Restoring Vision for 12 Elderly Patients</h3>
+          <p style="color:var(--text-light); font-size:0.88rem; line-height:1.7;">Partnering with eye specialists, we provided free cataract screenings and prescription glasses to 12 elderly patients who had suffered for years.</p>
+          <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(13,79,60,0.1); color:var(--text-light); font-size:0.78rem;">December 2023 &bull; KPK District</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section">
+    <div class="section-header center">
+      <div class="tag tag-gold">Testimonials</div>
+      <h2 class="section-title" style="margin-top:0.75rem">What People <span class="green">Say</span></h2>
+      <div class="divider center"></div>
+    </div>
+    <div class="testimonial-carousel" id="testimonialCarousel">
+      <div class="testimonial-track" id="testimonialTrack">
+        <div class="testimonial-slide">
+          <div class="testimonial-card">
+            <p class="testimonial-quote">"Umeed Welfare Group changed my life. I had no money for treatment, but their camp gave me the medicine I needed. May Allah bless everyone who donated."</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">F</div>
+              <div>
+                <div class="testimonial-name">Fatima Bibi</div>
+                <div class="testimonial-role">Patient, Sindh Province</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-slide">
+          <div class="testimonial-card">
+            <p class="testimonial-quote">"As a volunteer, I have never felt more purpose. Seeing hundreds of patients receive care with dignity, knowing donations actually reach them — this is real charity."</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">A</div>
+              <div>
+                <div class="testimonial-name">Dr. Ahmed Raza</div>
+                <div class="testimonial-role">Volunteer Physician</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-slide">
+          <div class="testimonial-card">
+            <p class="testimonial-quote">"I donate monthly. The transparency reports they share, the photos, the updates — I can see exactly how my donation is helping real people. This is what trust looks like."</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">M</div>
+              <div>
+                <div class="testimonial-name">Muhammad Hassan</div>
+                <div class="testimonial-role">Regular Donor, Karachi</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-slide">
+          <div class="testimonial-card">
+            <p class="testimonial-quote">"The partnership with VFAHT has amplified the impact enormously. Together we're reaching communities that no other organization has served. Truly inspiring work."</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">Z</div>
+              <div>
+                <div class="testimonial-name">Zainab Al-Hussaini</div>
+                <div class="testimonial-role">VFAHT Representative</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-controls">
+      <button class="carousel-btn" onclick="prevTestimonial()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="carousel-dots" id="testimonialDots">
+        <button class="carousel-dot active" onclick="goTestimonial(0)"></button>
+        <button class="carousel-dot" onclick="goTestimonial(1)"></button>
+        <button class="carousel-dot" onclick="goTestimonial(2)"></button>
+        <button class="carousel-dot" onclick="goTestimonial(3)"></button>
+      </div>
+      <button class="carousel-btn" onclick="nextTestimonial()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- PARTNERS STRIP -->
+  <div class="partners-strip">
+    <div class="partners-inner">
+      <div style="color:var(--text-light); font-size:0.82rem; letter-spacing:0.15em; text-transform:uppercase; font-weight:600;">Our Partners &amp; Collaborators</div>
+      <div class="partners-logos">
+        <div class="partner-logo">
+          <div class="partner-logo-box">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <rect width="40" height="40" rx="8" fill="rgba(13,79,60,0.08)"/>
+              <text x="20" y="25" text-anchor="middle" fill="var(--green-mid)" font-size="11" font-weight="700">VFAHT</text>
+            </svg>
+          </div>
+          <div class="partner-name">VFAHT</div>
+          <div class="partner-subtitle">Healthcare Partner</div>
+        </div>
+        <div class="partner-logo">
+          <div class="partner-logo-box">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <rect width="40" height="40" rx="8" fill="rgba(212,175,55,0.1)"/>
+              <text x="20" y="18" text-anchor="middle" fill="var(--gold)" font-size="7" font-weight="700">JILANI</text>
+              <text x="20" y="28" text-anchor="middle" fill="var(--gold)" font-size="7" font-weight="700">WELFARE</text>
+            </svg>
+          </div>
+          <div class="partner-name">Jilani Welfare</div>
+          <div class="partner-subtitle">Association Partner</div>
+        </div>
+        <div class="partner-logo">
+          <div class="partner-logo-box">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <rect width="40" height="40" rx="8" fill="rgba(13,79,60,0.08)"/>
+              <text x="20" y="20" text-anchor="middle" fill="var(--green-deep)" font-size="9" font-weight="700">MEEZAN</text>
+              <text x="20" y="30" text-anchor="middle" fill="var(--green-mid)" font-size="7">BANK</text>
+            </svg>
+          </div>
+          <div class="partner-name">Meezan Bank</div>
+          <div class="partner-subtitle">Banking Partner</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER INCLUDED IN ALL PAGES -->
+</div>
+
+<!-- ==================== ABOUT PAGE ==================== -->
+<div id="page-about" class="page">
+  <section style="background:linear-gradient(135deg, var(--green-deep), #1a5c42); padding:5rem 2rem; text-align:center; color:white;">
+    <div style="max-width:700px; margin:0 auto;">
+      <div class="tag" style="background:rgba(212,175,55,0.2); color:var(--gold); border:1px solid rgba(212,175,55,0.3); margin-bottom:1rem;">About Us</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.5rem); font-weight:700; margin-bottom:1rem;">Our Story of <span style="color:var(--gold);">Hope</span></h1>
+      <p style="opacity:0.8; font-size:1.05rem; line-height:1.8;">Umeed Welfare Group was born from a simple yet profound belief — that access to healthcare is a human right, not a privilege.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start;">
+      <div class="reveal-left">
+        <div class="tag tag-green" style="margin-bottom:1rem;">Our Journey</div>
+        <h2 class="section-title">From a Single Camp<br>to a <span class="green">Movement</span></h2>
+        <div class="divider"></div>
+        <div class="timeline" style="margin-top:2rem;">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2019</div>
+            <div class="timeline-title">The First Camp</div>
+            <div class="timeline-desc">Syed Basim Qamar Jaffery organized the very first free medical camp in a small village in Punjab, serving 40 patients with a team of 5 volunteers.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2020</div>
+            <div class="timeline-title">Partnership with VFAHT</div>
+            <div class="timeline-desc">Formal partnership established with VFAHT, bringing specialized medical professionals and expanded diagnostic capabilities to our camps.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2021</div>
+            <div class="timeline-title">Jilani Welfare Joins</div>
+            <div class="timeline-desc">The Jilani Welfare Association became a key collaborator, helping extend our reach to KPK province and underserved border communities.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2022</div>
+            <div class="timeline-title">Scaling Up Operations</div>
+            <div class="timeline-desc">Introduced mobile medical units, allowing us to reach remote areas inaccessible by traditional means. 500 patients served in a single camp.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2024</div>
+            <div class="timeline-title">2,400+ Lives Touched</div>
+            <div class="timeline-desc">Today, Umeed Welfare Group operates across 6 districts with 120+ volunteers, a permanent pharmacy supply chain, and ongoing community health programs.</div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal-right">
+        <div style="background:var(--white); border-radius:20px; padding:2rem; box-shadow:var(--shadow); margin-bottom:2rem; border:1px solid rgba(13,79,60,0.08);">
+          <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1.5rem;">
+            <div style="width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg, var(--green-mid), var(--green-deep)); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:1.4rem; flex-shrink:0;">S</div>
+            <div>
+              <div style="font-weight:700; font-size:1.1rem; color:var(--text);">Syed Basim Qamar Jaffery</div>
+              <div style="color:var(--green-mid); font-size:0.85rem; font-weight:600;">Founder &amp; Director</div>
+            </div>
+          </div>
+          <p style="color:var(--text-light); font-size:0.92rem; line-height:1.8; font-style:italic; border-left:3px solid var(--gold); padding-left:1rem;">
+            "I remember the day a mother carried her child for three hours just to reach our camp. That moment confirmed everything. Healthcare is not a privilege — it is a right. As long as I breathe, Umeed Welfare Group will fight for that right for every person, regardless of their means."
+          </p>
+        </div>
+        <div style="height:280px; border-radius:16px; overflow:hidden; box-shadow:var(--shadow);">
+          <img src="https://images.unsplash.com/photo-1504813184591-01572f98c85f?w=600&q=80" alt="Medical team" style="width:100%; height:100%; object-fit:cover;"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:rgba(13,79,60,0.04); padding:5rem 2rem;">
+    <div style="max-width:1400px; margin:0 auto;">
+      <div class="section-header center">
+        <h2 class="section-title">Mission, Vision &amp; <span class="green">Values</span></h2>
+        <div class="divider center"></div>
+      </div>
+      <div class="grid-3">
+        <div class="card reveal" style="border-top:4px solid var(--green-mid);">
+          <div style="color:var(--green-mid); margin-bottom:1rem;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3 style="font-size:1.2rem; font-weight:700; color:var(--text); margin-bottom:0.75rem;">Our Mission</h3>
+          <p style="color:var(--text-light); line-height:1.7; font-size:0.92rem;">To provide free, dignified, and quality healthcare services to underprivileged communities across Pakistan through organized medical camps, medicine distribution, and preventive health education.</p>
+        </div>
+        <div class="card reveal" style="border-top:4px solid var(--gold); transition-delay:0.15s">
+          <div style="color:var(--gold); margin-bottom:1rem;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <h3 style="font-size:1.2rem; font-weight:700; color:var(--text); margin-bottom:0.75rem;">Our Vision</h3>
+          <p style="color:var(--text-light); line-height:1.7; font-size:0.92rem;">A Pakistan where every citizen, regardless of income or location, has access to essential healthcare services. A society where no one suffers preventable disease due to lack of resources or access.</p>
+        </div>
+        <div class="card reveal" style="border-top:4px solid var(--green-light); transition-delay:0.3s">
+          <div style="color:var(--green-light); margin-bottom:1rem;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <h3 style="font-size:1.2rem; font-weight:700; color:var(--text); margin-bottom:0.75rem;">Our Values</h3>
+          <ul style="color:var(--text-light); line-height:2; font-size:0.92rem; list-style:none; padding:0;">
+            <li style="display:flex; gap:0.5rem; align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--green-mid)" stroke="none"><circle cx="12" cy="12" r="6"/></svg> Compassion without condition</li>
+            <li style="display:flex; gap:0.5rem; align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--green-mid)" stroke="none"><circle cx="12" cy="12" r="6"/></svg> Full transparency &amp; accountability</li>
+            <li style="display:flex; gap:0.5rem; align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--green-mid)" stroke="none"><circle cx="12" cy="12" r="6"/></svg> Dignity for every patient</li>
+            <li style="display:flex; gap:0.5rem; align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--green-mid)" stroke="none"><circle cx="12" cy="12" r="6"/></svg> Community-driven solutions</li>
+            <li style="display:flex; gap:0.5rem; align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--green-mid)" stroke="none"><circle cx="12" cy="12" r="6"/></svg> Islamic ethics &amp; humanitarian law</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="section">
+    <div class="section-header center">
+      <h2 class="section-title">Our <span class="green">Team</span></h2>
+      <div class="divider center"></div>
+      <p class="section-subtitle">Dedicated individuals who give their time, skills and hearts to serve humanity.</p>
+    </div>
+    <div class="grid-4">
+      <div class="team-card reveal">
+        <div class="team-img">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <div class="team-body">
+          <div class="team-name">Syed Basim Qamar Jaffery</div>
+          <div class="team-role">Founder &amp; Director</div>
+          <div class="team-desc">Visionary leader who turned compassion into organized action, establishing Umeed Welfare Group from the ground up.</div>
+        </div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:0.1s">
+        <div class="team-img" style="background:linear-gradient(135deg, #1a7a5e, #0d4f3c);">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <div class="team-body">
+          <div class="team-name">Dr. Amina Siddiqui</div>
+          <div class="team-role">Chief Medical Officer</div>
+          <div class="team-desc">Renowned physician who oversees all medical operations, ensuring highest standards of care at every camp.</div>
+        </div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:0.2s">
+        <div class="team-img" style="background:linear-gradient(135deg, #2ecc97, #1a7a5e);">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <div class="team-body">
+          <div class="team-name">Hassan Raza</div>
+          <div class="team-role">Operations Manager</div>
+          <div class="team-desc">Coordinates logistics for every camp, ensuring medicines, equipment and volunteers are perfectly organized.</div>
+        </div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:0.3s">
+        <div class="team-img" style="background:linear-gradient(135deg, #d4af37, #0d4f3c);">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <div class="team-body">
+          <div class="team-name">Zainab Malik</div>
+          <div class="team-role">Community Liaison</div>
+          <div class="team-desc">Builds bridges between Umeed and local communities, identifying areas of greatest need and ensuring cultural sensitivity.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTNERS DETAILED -->
+  <section style="background:linear-gradient(135deg, var(--green-deep), #0f6347); padding:4rem 2rem; color:white;">
+    <div style="max-width:1400px; margin:0 auto; text-align:center;">
+      <h2 style="font-size:2rem; font-weight:700; color:var(--gold); margin-bottom:0.5rem;">Our Partners</h2>
+      <div class="divider center"></div>
+      <p style="opacity:0.8; margin-bottom:3rem;">Together, we achieve more.</p>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem;">
+        <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:20px; padding:2rem; text-align:left;">
+          <div style="background:rgba(212,175,55,0.2); border-radius:12px; padding:0.75rem 1.25rem; display:inline-block; margin-bottom:1rem; font-weight:800; font-size:1.1rem; color:var(--gold); letter-spacing:0.1em;">VFAHT</div>
+          <h3 style="color:white; font-size:1.15rem; margin-bottom:0.75rem;">Volunteers for Advancement of Health &amp; Training</h3>
+          <p style="opacity:0.8; font-size:0.9rem; line-height:1.7;">VFAHT brings specialized medical expertise, training programs, and a network of volunteer healthcare professionals to our joint camps. Their focus on disease prevention and health education perfectly complements our service delivery model.</p>
+          <div style="margin-top:1.25rem; display:flex; gap:1.5rem;">
+            <div><div style="color:var(--gold); font-weight:700; font-size:1.3rem;">50+</div><div style="opacity:0.7; font-size:0.8rem;">Expert Volunteers</div></div>
+            <div><div style="color:var(--gold); font-weight:700; font-size:1.3rem;">8</div><div style="opacity:0.7; font-size:0.8rem;">Joint Camps</div></div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:20px; padding:2rem; text-align:left;">
+          <div style="background:rgba(212,175,55,0.2); border-radius:12px; padding:0.75rem 1.25rem; display:inline-block; margin-bottom:1rem; font-weight:800; font-size:0.95rem; color:var(--gold); letter-spacing:0.05em;">JILANI WELFARE</div>
+          <h3 style="color:white; font-size:1.15rem; margin-bottom:0.75rem;">Jilani Welfare Association</h3>
+          <p style="opacity:0.8; font-size:0.9rem; line-height:1.7;">The Jilani Welfare Association has been a pillar of community development for years. Their local knowledge, trusted community relationships, and infrastructure support have been invaluable in extending our reach to the most remote and vulnerable populations.</p>
+          <div style="margin-top:1.25rem; display:flex; gap:1.5rem;">
+            <div><div style="color:var(--gold); font-weight:700; font-size:1.3rem;">4</div><div style="opacity:0.7; font-size:0.8rem;">Provinces Covered</div></div>
+            <div><div style="color:var(--gold); font-weight:700; font-size:1.3rem;">10+</div><div style="opacity:0.7; font-size:0.8rem;">Joint Projects</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ==================== PROGRAMS PAGE ==================== -->
+<div id="page-programs" class="page">
+  <section style="background:linear-gradient(135deg, var(--green-deep), #1a5c42); padding:5rem 2rem; text-align:center; color:white;">
+    <div style="max-width:700px; margin:0 auto;">
+      <div class="tag" style="background:rgba(212,175,55,0.2); color:var(--gold); border:1px solid rgba(212,175,55,0.3); margin-bottom:1rem;">Our Programs</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.5rem); font-weight:700; margin-bottom:1rem;">Healthcare Programs<br>That <span style="color:var(--gold);">Transform Lives</span></h1>
+      <p style="opacity:0.8; font-size:1.05rem; line-height:1.8;">Every program is designed to address a specific barrier to healthcare access faced by underprivileged communities.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="grid-2">
+      <div class="program-card reveal">
+        <div class="program-img">
+          <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=80" alt="Medical Camp"/>
+          <div class="program-img-overlay"></div>
+        </div>
+        <div class="program-body">
+          <div class="program-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div class="program-title">Free Medical Camps</div>
+          <div class="program-desc">Our flagship program organizes large-scale free medical camps in rural and urban slum areas. Each camp features qualified doctors across multiple specialties, nurses, diagnostic equipment, and a complete on-site pharmacy. Patients receive full consultations, diagnostics, and medicines — all free of cost, with complete dignity.</div>
+          <div style="margin-top:1.25rem; padding:1rem; background:rgba(13,79,60,0.05); border-radius:10px;">
+            <div style="font-weight:600; color:var(--text); font-size:0.9rem; margin-bottom:0.75rem;">Program Highlights:</div>
+            <ul style="color:var(--text-light); font-size:0.87rem; line-height:2; list-style:none; padding:0;">
+              <li>-- Multi-specialty consultations (General, Gynecology, Pediatrics, ENT)</li>
+              <li>-- Full diagnostic suite on-site</li>
+              <li>-- Free medicines dispensed at each camp</li>
+              <li>-- Women-only consultation areas for privacy</li>
+            </ul>
+          </div>
+          <div class="program-stats">
+            <div class="program-stat"><span class="program-stat-num">18</span><span class="program-stat-label">Camps Held</span></div>
+            <div class="program-stat"><span class="program-stat-num">2,400+</span><span class="program-stat-label">Patients</span></div>
+            <div class="program-stat"><span class="program-stat-num">6</span><span class="program-stat-label">Districts</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-card reveal" style="transition-delay:0.15s">
+        <div class="program-img">
+          <img src="https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=600&q=80" alt="Medicine distribution"/>
+          <div class="program-img-overlay"></div>
+        </div>
+        <div class="program-body">
+          <div class="program-icon" style="background:linear-gradient(135deg, var(--gold), #8a6e00);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+          </div>
+          <div class="program-title">Healthcare Supplies &amp; Medicines</div>
+          <div class="program-desc">We maintain a dedicated pharmacy supply chain, sourcing quality medicines at low cost and distributing them free to patients. Our supply program also provides essential healthcare supplies — bandages, syringes, diagnostic equipment — to areas with no pharmacy access. We partner with pharmaceutical companies for bulk procurement.</div>
+          <div style="margin-top:1.25rem; padding:1rem; background:rgba(212,175,55,0.05); border-radius:10px;">
+            <div style="font-weight:600; color:var(--text); font-size:0.9rem; margin-bottom:0.75rem;">Impact So Far:</div>
+            <ul style="color:var(--text-light); font-size:0.87rem; line-height:2; list-style:none; padding:0;">
+              <li>-- 5,200+ individual medicines distributed</li>
+              <li>-- Chronic disease management medications</li>
+              <li>-- Paediatric and maternal health supplies</li>
+              <li>-- Emergency medical kits for remote areas</li>
+            </ul>
+          </div>
+          <div class="program-stats">
+            <div class="program-stat"><span class="program-stat-num">5,200+</span><span class="program-stat-label">Medicines</span></div>
+            <div class="program-stat"><span class="program-stat-num">100%</span><span class="program-stat-label">Free</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-card reveal" style="transition-delay:0.3s">
+        <div class="program-img">
+          <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&q=80" alt="Diagnostics"/>
+          <div class="program-img-overlay"></div>
+        </div>
+        <div class="program-body">
+          <div class="program-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          </div>
+          <div class="program-title">Basic Diagnostic Services</div>
+          <div class="program-desc">Early detection saves lives. Our diagnostic program brings portable testing equipment to underserved communities — blood glucose monitoring, blood pressure, hemoglobin testing, urine analysis, and basic ECG services. Trained paramedics and nurses administer tests with laboratory-grade accuracy and immediate results.</div>
+          <div style="margin-top:1.25rem; padding:1rem; background:rgba(13,79,60,0.05); border-radius:10px;">
+            <div style="font-weight:600; color:var(--text); font-size:0.9rem; margin-bottom:0.75rem;">Tests Offered:</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+              <div style="color:var(--text-light); font-size:0.82rem; display:flex; gap:0.4rem; align-items:center;"><svg width="10" height="10" viewBox="0 0 10 10" fill="var(--green-mid)"><circle cx="5" cy="5" r="5"/></svg> Blood Glucose</div>
+              <div style="color:var(--text-light); font-size:0.82rem; display:flex; gap:0.4rem; align-items:center;"><svg width="10" height="10" viewBox="0 0 10 10" fill="var(--green-mid)"><circle cx="5" cy="5" r="5"/></svg> Blood Pressure</div>
+              <div style="color:var(--text-light); font-size:0.82rem; display:flex; gap:0.4rem; align-items:center;"><svg width="10" height="10" viewBox="0 0 10 10" fill="var(--green-mid)"><circle cx="5" cy="5" r="5"/></svg> Hemoglobin</div>
+              <div style="color:var(--text-light); font-size:0.82rem; display:flex; gap:0.4rem; align-items:center;"><svg width="10" height="10" viewBox="0 0 10 10" fill="var(--green-mid)"><circle cx="5" cy="5" r="5"/></svg> Urine Analysis</div>
+              <div style="color:var(--text-light); font-size:0.82rem; display:flex; gap:0.4rem; align-items:center;"><svg width="10" height="10" viewBox="0 0 10 10" fill="var(--green-mid)"><circle cx="5" cy="5" r="5"/></svg> Eye Screening</div>
+              <div style="color:var(--text-light); font-size:0.82rem; display:flex; gap:0.4rem; align-items:center;"><svg width="10" height="10" viewBox="0 0 10 10" fill="var(--green-mid)"><circle cx="5" cy="5" r="5"/></svg> BMI Assessment</div>
+            </div>
+          </div>
+          <div class="program-stats">
+            <div class="program-stat"><span class="program-stat-num">3,800+</span><span class="program-stat-label">Tests Done</span></div>
+            <div class="program-stat"><span class="program-stat-num">Free</span><span class="program-stat-label">Always</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-card reveal" style="transition-delay:0.45s">
+        <div class="program-img">
+          <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80" alt="Community Outreach"/>
+          <div class="program-img-overlay"></div>
+        </div>
+        <div class="program-body">
+          <div class="program-icon" style="background:linear-gradient(135deg, #2ecc97, #1a7a5e);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <div class="program-title">Community Outreach &amp; Education</div>
+          <div class="program-desc">Prevention is better than cure. Our outreach program educates communities about basic hygiene, nutrition, maternal health, childhood vaccination schedules, and chronic disease management. We work with local religious leaders, schools, and community councils to create sustainable health awareness that lasts long after our camps leave.</div>
+          <div style="margin-top:1.25rem; padding:1rem; background:rgba(46,204,151,0.05); border-radius:10px;">
+            <div style="font-weight:600; color:var(--text); font-size:0.9rem; margin-bottom:0.75rem;">Key Initiatives:</div>
+            <ul style="color:var(--text-light); font-size:0.87rem; line-height:2; list-style:none; padding:0;">
+              <li>-- Maternal &amp; Child Health Workshops</li>
+              <li>-- School Health Programs for 500+ students</li>
+              <li>-- Hygiene &amp; Sanitation Awareness</li>
+              <li>-- Local health ambassador training</li>
+            </ul>
+          </div>
+          <div class="program-stats">
+            <div class="program-stat"><span class="program-stat-num">500+</span><span class="program-stat-label">Educated</span></div>
+            <div class="program-stat"><span class="program-stat-num">12</span><span class="program-stat-label">Workshops</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:linear-gradient(135deg, var(--green-deep), #1a5c42); padding:4rem 2rem; text-align:center; color:white;">
+    <div style="max-width:600px; margin:0 auto;">
+      <h2 style="font-size:2rem; font-weight:700; margin-bottom:1rem;">Want to Support Our Programs?</h2>
+      <p style="opacity:0.8; margin-bottom:2rem; line-height:1.8;">Your donation directly funds medicines, doctor fees, diagnostic equipment, and logistics for our camps.</p>
+      <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+        <button class="btn-primary" onclick="navigate('donate')">Donate Now</button>
+        <button class="btn-outline" onclick="navigate('contact')">Volunteer With Us</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ==================== DONATE PAGE ==================== -->
+<div id="page-donate" class="page">
+  <div class="donate-hero">
+    <div style="max-width:700px; margin:0 auto;">
+      <div class="tag" style="background:rgba(212,175,55,0.2); color:var(--gold); border:1px solid rgba(212,175,55,0.3); margin-bottom:1rem;">Donate</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.5rem); font-weight:700; margin-bottom:1rem; color:white;">Your <span style="color:var(--gold);">PKR 500</span> Pays<br>for a Life-Saving Consultation</h1>
+      <p style="opacity:0.8; font-size:1.05rem; line-height:1.8; margin-bottom:2rem;">Every rupee goes directly to free medical care for those who need it most. 100% of donations reach our programs.</p>
+      <div style="display:flex; gap:2rem; justify-content:center; flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-size:2rem; font-weight:700; color:var(--gold);">100%</div><div style="opacity:0.7; font-size:0.85rem;">Reaches Beneficiaries</div></div>
+        <div style="text-align:center;"><div style="font-size:2rem; font-weight:700; color:var(--gold);">PKR 0</div><div style="opacity:0.7; font-size:0.85rem;">Admin Fees from Donations</div></div>
+        <div style="text-align:center;"><div style="font-size:2rem; font-weight:700; color:var(--gold);">Full</div><div style="opacity:0.7; font-size:0.85rem;">Transparency Reports</div></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="grid-2" style="align-items:start;">
+      <!-- Bank Details -->
+      <div class="reveal-left">
+        <h2 class="section-title">Bank <span class="green">Transfer</span></h2>
+        <div class="divider"></div>
+        <p style="color:var(--text-light); margin-bottom:1.5rem; font-size:0.92rem;">The most direct way to donate. Your money goes straight to our account with no intermediary fees.</p>
+        <div class="bank-card">
+          <div class="bank-card-header">
+            <div class="bank-logo-area">MEEZAN</div>
+            <div class="bank-info">
+              <div class="bank-name">Meezan Bank</div>
+              <div class="bank-subtitle">The Premier Islamic Bank</div>
+            </div>
+          </div>
+          <div class="bank-detail-row">
+            <span class="bank-detail-label">Account Title</span>
+            <span class="bank-detail-value">Syed Basim Qamar Jaffery</span>
+          </div>
+          <div class="bank-detail-row">
+            <span class="bank-detail-label">Account Number</span>
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <span class="bank-detail-value" id="accNum">01160112713996</span>
+              <button class="copy-btn" onclick="copyText('01160112713996')">Copy</button>
+            </div>
+          </div>
+          <div class="bank-detail-row">
+            <span class="bank-detail-label">Bank</span>
+            <span class="bank-detail-value">Meezan Bank Ltd.</span>
+          </div>
+          <div class="bank-detail-row">
+            <span class="bank-detail-label">Branch Code</span>
+            <span class="bank-detail-value">0116</span>
+          </div>
+          <div class="bank-detail-row">
+            <span class="bank-detail-label">IBAN</span>
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <span class="bank-detail
